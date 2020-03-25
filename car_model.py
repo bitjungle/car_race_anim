@@ -12,7 +12,11 @@ import pygame
 
 class Car(pygame.sprite.Sprite):
     '''A simple car model'''
-    def __init__(self, imagefile, speed=0, direction=[0, 0]):
+
+    X = 0
+    Y = 1
+
+    def __init__(self, imagefile, speed=[0, 0], direction=[0, 0]):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(imagefile)
         self.rect = self.image.get_rect()
@@ -33,7 +37,36 @@ class Car(pygame.sprite.Sprite):
         return self.rect.top
 
     def set_speed(self, speed):
+        ''' Set speed in x and y direction 
+        
+        Speed is given as a list with two elements 
+        where speed[0] is number of pixels to move in x-direction
+        and speed[1] is number of pixels to move in y-direction
+        for each move().
+
+        Se also set_direction().
+        '''
         self._speed = speed
+
+    def get_speed(self):
+        return self._speed
+
+    def get_speed_x(self):
+        return self._speed[self.X]
+
+    def get_speed_y(self):
+        return self._speed[self.Y]
+
+    def set_direction(self, direction):
+        ''' Set direction in x and y direction 
+        
+        Direction is given as a list with two elements 
+        where direction[0] indicates left (-1) or right (+1)
+        and direction[1] indicates up (-1) or down (+1).
+
+        Se also set_speed().
+        '''
+        self._direction = direction
 
     def get_speed(self):
         return self._speed
@@ -41,24 +74,12 @@ class Car(pygame.sprite.Sprite):
     def get_odometer(self):
         return self._odometer
 
-    def set_direction(self, direction):
-        '''Set the car direction
-
-        The direction is given as a list:
-        [1, 0] : moving to the right (0 deg)
-        [-1, 0] : moving to the left (180 deg)
-        [0, -1] : moving up (90 deg)
-        [0, 1] : moving down (270 deg)
-        '''
-        self._direction = direction
-
     def move(self):
-        move_x = self._direction[0]*self._speed
-        move_y = self._direction[1]
-        self._odometer += math.sqrt(move_x**2 + move_y**2) # Pythagoras
-        self.rect = self.rect.move([move_x, move_y])
+        self._odometer += math.sqrt(self._speed[0]**2 + self._speed[1]**2) # Pythagoras
+        self.rect = self.rect.move([self._speed[self.X]*self._direction[self.X], 
+                                    self._speed[self.Y]*self._direction[self.Y]])
 
-    def turn(self):
+    def flip_horiz(self):
         self.image = pygame.transform.flip(self.image, True, False)
         self._direction[0] *= -1
 

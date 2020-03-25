@@ -43,7 +43,7 @@ lanes = [None]*MAX_CARS # list of lane numbers
 for i in range(0, MAX_CARS): # generating car objects
     car_img = 'car_' + str(random.randint(1, MAX_CAR_MODELS)) + '.png'
     car_speed = random.randint(1, MAX_SPEED)
-    cars[i] = car.Car(car_img, car_speed, [-1, 0])
+    cars[i] = car.Car(car_img, [1, 0], [-1, 0])
     cars[i].set_ypos(50 + i * 50)
     cars[i].set_xpos(DISPLAY_WIDTH)
     lanes[i] = myfont.render(str(i+1), False, LIGHTGRAY)
@@ -71,11 +71,12 @@ while True:
             screen.blit(cars[i].image, cars[i].rect)
 
             # new speed is the mean of prior speed and a random number
-            cars[i].set_speed((random.randint(0, MAX_SPEED)+cars[i].get_speed()) // 2)
+            x_speed = (random.randint(0, MAX_SPEED)+cars[i].get_speed_x()) // 2
+            cars[i].set_speed([x_speed, 0])
 
             if cars[i].get_xpos() < 0:
                 # car has reached left edge of screen, turning it
-                cars[i].turn()
+                cars[i].flip_horiz()
                 cars[i].set_xpos(1) # move the car 1px away from edge
 
             if cars[i].get_odometer() < last_car_dist:
