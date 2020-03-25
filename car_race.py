@@ -41,7 +41,7 @@ lanes = [None]*MAX_CARS # list of lane numbers
 
 
 for i in range(0, MAX_CARS): # generating car objects
-    car_img = 'car_' + str(random.randint(1, MAX_CAR_MODELS)) + '.png'
+    car_img = 'img/car_' + str(random.randint(1, MAX_CAR_MODELS)) + '.png'
     car_speed = random.randint(1, MAX_SPEED)
     cars[i] = car.Car(car_img, [1, 0], [-1, 0])
     cars[i].set_ypos(50 + i * 50)
